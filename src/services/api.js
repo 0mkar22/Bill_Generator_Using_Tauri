@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api' });
+const API = axios.create({ baseURL: '/api' });
 
 export const createWorkOrder = (workOrderData) => API.post('/workorders', workOrderData);
 export const getWorkOrders = () => API.get('/workOrders');
