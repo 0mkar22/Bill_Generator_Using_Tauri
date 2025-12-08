@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # 1. Database Service
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  # 2. Backend Service
+  server:
+    build: ./server
+    container_name: bill_generator_server
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/bill-generator
+      - PORT=5000
+    depends_on:
+      - mongodb
+
+  # 3. Frontend Service
+  client:
+    build: .
+    container_name: bill_generator_client
+    ports:
+      - "80:80" # Accessible at http://localhost
+    depends_on:
+      - server
+
+volumes:
+  mongo-data:

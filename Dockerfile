@@ -1,16 +1,21 @@
-# Use a base image
-FROM node:22-alpine
-FROM mongo:latest
-FROM ivangabriele/tauri:fedora-40-20-nightly
+# Dockerfile (Root)
 
-# Set the working directory inside the container
+# Stage 1: Build the React application
+FROM node:18-alpine as build
 WORKDIR /app
-
-# Copy application files from your local machine to the image
+COPY package*.json ./
+RUN npm install
 COPY . .
+RUN npm run build
 
-# Install dependencies (this runs a command during the build process)
-RUN yarn install --production
+# Stage 2: Serve the app with Nginx
+FROM nginx:alpine
 
-# Define the command to run when the container starts
-CMD ["node", "./src/index.js"]
+# Copy built assets from Stage 1
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy custom Nginx configuration (we will create this next)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
