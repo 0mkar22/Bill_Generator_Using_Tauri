@@ -30,7 +30,7 @@ const InvoiceGenerator = () => {
 
   const fetchSavedInvoices = async () => {
       try {
-          const response = await axios.get('http://localhost:5000/api/invoices');
+          const response = await axios.get('/api/invoices');
           setSavedInvoices(response.data.data || []);
       } catch (error) {
           console.error("Failed to fetch saved invoices", error);

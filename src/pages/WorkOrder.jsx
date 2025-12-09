@@ -123,7 +123,7 @@ const WorkOrder = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/workOrders', formData);
+      await axios.post('/api/workOrders', formData);
       alert('Work Order created successfully!');
       setFormData({
         entryNumber: '', eventDate: '', vendor: '',

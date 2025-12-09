@@ -68,7 +68,7 @@ const Reports = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await axios.get('http://localhost:5000/api/workOrders');
+            const response = await axios.get('/api/workOrders');
             const allWorkItems = (response.data.data || []).flatMap(order =>
                 order.workItems.map(item => ({
                     ...item,
@@ -218,7 +218,7 @@ const Reports = () => {
     const handleSaveChanges = async () => {
         if (!editedItemData?._id || !editedItemData?.parentWorkOrderId) return;
         try {
-            const parentWorkOrderResponse = await axios.get(`http://localhost:5000/api/workOrders/${editedItemData.parentWorkOrderId}`);
+            const parentWorkOrderResponse = await axios.get(`/api/workOrders/${editedItemData.parentWorkOrderId}`);
             const parentWorkOrder = parentWorkOrderResponse.data;
             const itemIndex = parentWorkOrder.workItems.findIndex(item => item._id === editedItemData._id);
             if (itemIndex === -1) return;
@@ -230,7 +230,7 @@ const Reports = () => {
                 eventDate: editedItemData.date || parentWorkOrder.eventDate,
                 vendor: editedItemData.vendor || parentWorkOrder.vendor
             };
-            await axios.put(`http://localhost:5000/api/workOrders/${updatedParentWorkOrder._id}`, updatedParentWorkOrder);
+            await axios.put(`/api/workOrders/${updatedParentWorkOrder._id}`, updatedParentWorkOrder);   
             alert('Work item updated successfully!');
             handleCloseEditModal();
             fetchWorkOrders();
